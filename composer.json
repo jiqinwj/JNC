@@ -1,0 +1,28 @@
+{
+  "name": "socket/jnc",
+  "type": "library",
+  "description": "The socket library.",
+  "keywords": [
+    "Ji-Network-CE",
+    "socket"
+  ],
+  "license": "MIT",
+  "require": {
+    "php": "^7.1",
+    "opis/closure": "^3.6",
+    "povils/figlet": "dev-master"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "autoload": {
+    "psr-4": {
+      "JNC\\": "src/",
+      "App\\": "app/"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
