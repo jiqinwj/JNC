@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>物联网主控制面板</title>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <style>
+
+        body{
+            background-image: url(../images/bg1.jpg);
+            background-color: #202C43;
+            background-size:100%;
+
+            background-attachment:fixed;
+            background-repeat:no-repeat;
+            background-size:contain;
+            -moz-background-size:cover;
+            -webkit-background-size:cover;
+        }
+        button.btns{
+            background-color: #e1bb60;
+
+            border-radius: 0;
+            outline: none;
+            color: #FFFFFF;
+            padding:15px;
+        }
+        button.btns:hover{
+            color: #FFFFFF;
+        }
+        textarea.mqttData{
+            border:none;
+            width: 100%;
+            height: 100%;
+            outline: none;
+            color: #202C43;
+            resize:none;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <h1>物联网主控制面板</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+
+                    <table class="table table-bordered text-justify" style="opacity:0.9;text-align:center;font-weight:bold;background-color:#202C43;width:100%;color:#F9F8F7;">
+                        <tbody>
+                        <tr ><td colspan="3" class="text-center">LED模块</td></tr>
+                        <tr>
+                            <th>GPIO端口控制</th>
+                            <th>动作</th>
+                            <th>状态</th>
+                        </tr>
+                        <tr style="background-color: #F9FBFE;color: #3D3D3F">
+                            <td>GPIO4</td>
+                            <td><button type="button" class="btns gpio" data-id="4" data-state="1">[On/Off]</button></td>
+                            <td id="io_stat4">已关闭</td>
+                        </tr>
+                        <tr style="background-color: #F9FBFE;color: #3D3D3F">
+                            <td>GPIO2</td>
+                            <td><button type="button" class="btns gpio" data-id="2" data-state="1">[On/Off]</button></td>
+                            <td id="io_stat2" >已关闭</td>
+                        </tr>
+                        <tr style="background-color: #F9FBFE;color: #3D3D3F">
+                            <td>GPIO5</td>
+                            <td><button type="button" class="btns gpio" data-id="5" data-state="1">[On/Off]</button></td>
+                            <td id="io_stat5">已关闭</td>
+                        </tr>
+
+
+                        </tbody>
+
+                    </table>
+                    <table class="table table-bordered text-justify" style="text-align:center;font-weight:bold;background-color:#202C43;width:100%;color:#F9F8F7;">
+                        <tbody>
+                        <tr ><td colspan="2" class="text-center">传感器模块</td></tr>
+                        <tr>
+                            <th>设备</th>
+                            <th>数据显示</th>
+
+                        </tr>
+                        <tr style="background-color: #F9FBFE;color: #3D3D3F">
+                            <td>温度传感器</td>
+
+                            <td id="temp">23C</td>
+                        </tr>
+                        <tr style="background-color: #F9FBFE;color: #3D3D3F">
+                            <td >湿度传感器</td>
+
+                            <td id="dht">23C</td>
+                        </tr>
+
+
+
+                        </tbody>
+
+                    </table>
+                    <table class="table table-bordered text-justify" style="text-align:center;font-weight:bold;background-color:#202C43;width:100%;color:#F9F8F7;">
+                        <tbody>
+                        <tr ><td colspan="2" class="text-center">ADC模块</td></tr>
+                        <tr>
+                            <th>设备</th>
+                            <th>数据显示</th>
+
+                        </tr>
+                        <tr style="background-color: #F9FBFE;color: #3D3D3F">
+                            <td>ADC数模</td>
+
+                            <td id="adc">0.1v</td>
+                        </tr>
+
+
+                        </tbody>
+
+                    </table>
+
+            </div>
+            <div class="col-md-5">
+
+
+                    <table class="table table-bordered text-justify" style="opacity:0.9;text-align:center;font-weight:bold;background-color:#202C43;width:100%;color:#F9F8F7;">
+                        <tbody>
+                        <tr ><td colspan="4" class="text-center">MQTT模块</td></tr>
+                        <tr style="background-color: #F9FBFE;color: #3D3D3F">
+                            <td>ClientID</td>
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" value="web" id="clientId" placeholder="CLIENTID">
+                                </div>
+                            </td>
+                            <td>UserName</td>
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="UserName" placeholder="UserName">
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr style="background-color: #F9FBFE;color: #3D3D3F">
+                            <td>Password</td>
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="Password" placeholder="Password">
+                                </div>
+                            </td>
+                            <td>订阅Topic</td>
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" value="web" id="TopicName" placeholder="TopicName">
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-success" id="cancelSub">取消订阅</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr style="background-color: #F9FBFE;color: #3D3D3F">
+                            <td>服务端IP</td>
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" value="127.0.0.1" id="serverIp" placeholder="服务端IP">
+                                </div>
+                            </td>
+                            <td>服务端Port</td>
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" value="4570" id="port" placeholder="服务端Port">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr style="background-color: #F9FBFE;color: #3D3D3F">
+                            <td colspan="4" style="height: 100px;">
+                                <textarea class="mqttData" id="mqttSend" value="esp8266" placeholder="这里输入要发送的主题数据"></textarea>
+                            </td>
+
+                        </tr>
+                        <tr style="background-color: #F9FBFE;color: #3D3D3F">
+                            <td colspan="4" style="height: 100px;">
+                                <button class="btn btn-primary" id="startMqtt" data-v="1">连接websocket</button>
+                                <button class="btn btn-primary" id="sendData">发送指令</button>
+                                <button class="btn btn-primary" id="subscribe">订阅消息</button>
+                                <button class="btn btn-primary" id="adc_get">数模转换</button>
+                            </td>
+
+                        </tr>
+                        </tbody>
+
+                    </table>
+
+            </div>
+            <div class="col-md-3">
+
+                <table class="table table-bordered text-justify" style="opacity:0.6;text-align:center;font-weight:bold;background-color:#202C43;width:100%;color:#F9F8F7;">
+                    <tbody>
+                    <tr ><td colspan="3" class="text-center">数据接收显示区</td></tr>
+                    <tr>
+                        <td colspan="3" style="padding:0px;">
+                            <textarea class="mqttData" id="mqttRecv" style="height: 600px"></textarea>
+                        </td>
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<!--<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>-->
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="../js/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="../js/index.js"></script>
+
+</body>
+</html>

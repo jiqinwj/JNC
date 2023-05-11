@@ -2,6 +2,8 @@
 
 namespace JNC;
 
+use JNC\Protocols\Websocket;
+
 class TcpConnection
 {
     public $_sockfd;//当前连接的fd socket
@@ -251,6 +253,29 @@ class TcpConnection
 
                 }
 
+                break;
+            case 'ws':
+                if ($this->_protocol->_websocket_handshake_status==Websocket::WEBSOCKET_START_STATUS){
+                    if($this->send()){
+                        //握手成功
+                        if ($this->_protocol->_websocket_handshake_status==Websocket::WEBSOCKET_RUNNING_STATUS){
+
+                            $server->runEventCallBack("open",[$this]);
+                        }else{
+                            $this->Close();
+                        }
+                    }
+                }
+                else if ($this->_protocol->_websocket_handshake_status==Websocket::WEBSOCKET_RUNNING_STATUS){
+                    if ($this->_protocol->_opcode == Websocket::OPCODE_PING){
+                        echo "收到ping帧\r\n";
+                        $this->send();
+                    }else{
+                        $server->runEventCallBack("message",[$msg,$this]);
+                    }
+                }else{
+                    $this->Close();
+                }
                 break;
             case 'redis':
                 //我们会根据情况给大家写一个redis客户端

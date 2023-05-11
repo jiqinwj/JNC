@@ -1,0 +1,32 @@
+POST /index.php?a=b&C=33 HTTP/1.1\r\n
+User-Agent: PostmanRuntime/7.26.8\r\n
+Accept: */*\r\n
+Postman-Token: 411c36cb-253f-489b-bb48-0be417ad396e\r\n
+Host: 127.0.0.1:4567\r\n
+Accept-Encoding: gzip, deflate, br\r\n
+Connection: keep-alive\r\n
+Content-Type: multipart/form-data; boundary=--------------------------684396667139727036762841\r\n
+Content-Length: 636\r\n
+\r\n
+----------------------------684396667139727036762841\r\n
+Content-Disposition: form-data; name="name"\r\n
+\r\n
+jack\r\n
+----------------------------684396667139727036762841\r\n
+Content-Disposition: form-data; name="age"\r\n
+\r\n
+5000\r\n
+----------------------------684396667139727036762841\r\n
+Content-Disposition: form-data; name="sex"\r\n
+\r\n
+2\r\n
+----------------------------684396667139727036762841\r\n
+Content-Disposition: form-data; name="idcard"; filename="ss.txt"\r\n
+Content-Type: text/plain\r\n
+\r\n
+abc\r\n
+----------------------------684396667139727036762841\r\n
+Content-Disposition: form-data; name="mobile"\r\n
+\r\n
+235235\r\n
+----------------------------684396667139727036762841--\r\n

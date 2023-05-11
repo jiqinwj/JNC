@@ -34,6 +34,14 @@ $server->on("masterShutdown",function (\JNC\Server $server){
     fprintf(STDOUT,"master server shutdown\r\n");
 });
 
+//mqtt 的连接事件/ websocket事件
+$server->on("open",function (\JNC\Server $server,\JNC\TcpConnection $connection){
+
+    echo "握手成功\r\n";
+    $connection->send("你好，世界".date("YmdHis"));
+
+});
+
 
 $server->on("workerStart", function (\JNC\Server $server) {
     //
@@ -78,7 +86,6 @@ $server->on("connect",function (\JNC\Server $server,\JNC\TcpConnection $connecti
 
 $server->on("request",function (\JNC\Server $server,\JNC\Request $request,\JNC\Response $response){
 
-    print_r("dddd");
     global $routes;
     global $dispatcher;
     if (preg_match("/.html|.jpg|.png|.gif|.js|.css|.jpeg/",$request->_request['uri'])){

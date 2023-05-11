@@ -1,0 +1,11 @@
+POST /index.php?a=b&C=33 HTTP/1.1\r\n
+User-Agent: PostmanRuntime/7.26.8\r\n
+Accept: */*\r\n
+Postman-Token: 6a782f8a-d6ad-44dd-a35d-120e81dd4715\r\n
+Host: 127.0.0.1:4567\r\n
+Accept-Encoding: gzip, deflate, br\r\n
+Connection: keep-alive\r\n
+Content-Type: application/x-www-form-urlencoded\r\n
+Content-Length: 23\r\n
+\r\n
+name=tony&age=300&sex=1
