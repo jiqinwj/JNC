@@ -1,5 +1,5 @@
 # Ji-Network-CE
-一个网络通信引擎，支持HTTP,TCP,WebSocket,MQTT协议。自定义协议
+一个网络通信引擎，支持多进程,HTTP,TCP,WebSocket,MQTT协议。自定义协议
 
 # 启动控制台
 ![image](https://github.com/jiqinwj/JNC/assets/16432577/78fd87d9-0930-42ce-bf05-1da204eb165d)
