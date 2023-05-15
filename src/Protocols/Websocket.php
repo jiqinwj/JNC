@@ -73,6 +73,16 @@ class Websocket implements Protocol
      * Masking-key：0 或 4 字节（32 位）
        所有从客户端传送到服务端的数据帧，数据载荷都进行了掩码操作，Mask 为 1，且携带了 4 字节的 Masking-key。如果 Mask 为 0，则没有 Masking-key。
      */
+
+    /*
+     * 初始化对应的服务：http是用来握手的
+     */
+    public function __construct()
+    {
+        $this->_http = new Http();
+        $this->_websocket_handshake_status = self::WEBSOCKET_START_STATUS;
+    }
+
     public $_masKey = [];
     public function Len($data)
     {
@@ -157,6 +167,7 @@ class Websocket implements Protocol
             }else{
                 $this->_dataLen = $this->_payload_len;
             }
+            print_r($this->_dataLen);
 
             $this->_masKey[0] = $data[$this->_headerLen-4];
             $this->_masKey[1] = $data[$this->_headerLen-3];
@@ -293,5 +304,15 @@ class Websocket implements Protocol
             }
         }
         return false;
+    }
+
+    public function ping()
+    {
+        return chr(0x01|self::OPCODE_PING).chr(0x00);
+    }
+
+    public function pong()
+    {
+        return chr(0x01|self::OPCODE_PONG).chr(0x00);
     }
 }

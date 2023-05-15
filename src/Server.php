@@ -6,6 +6,7 @@ use JNC\Event\Epoll;
 use JNC\Event\Event;
 use JNC\Event\Select;
 use JNC\Protocols\Http;
+use JNC\Protocols\Websocket;
 use mysql_xdevapi\Exception;
 
 class Server
@@ -137,7 +138,10 @@ class Server
             $this->onClientJoin();//连接上了客户端数量++
             if ($protocol instanceof Http) {
                 $connection->_link_type = TcpConnection::HTTP_LINK_TYPE;
+            } else if ($protocol instanceof Websocket) {
+                $connection->_link_type = TcpConnection::WS_LINK_TYPE;
             }
+
 
             static::$_connections[(int)$confd] = $connection;
 

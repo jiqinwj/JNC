@@ -11,12 +11,12 @@ require_once "vendor/autoload.php";
  *  mqtt connect/subscribe/unsubscribe/publish/close
  */
 //http 协议启动demo
-$server = new \JNC\Server("http://0.0.0.0:80");
+$server = new \JNC\Server("ws://0.0.0.0:4567");
 
 $server->setting([
-    'workerNum' => 2,//工作的进程数量
+    'workerNum' => 1,//工作的进程数量
     'daemon' => false,//是否开启常驻进程
-    'taskNum' => 2,//任务的进程数量
+    'taskNum' => 1,//任务的进程数量
     //unix 套接字通信
     "task" => [
         "unix_socket_server_file" => "/Users/g01d-01-0349/code/JNC/sock/te_unix_socket_server.sock",
@@ -41,6 +41,13 @@ $server->on("open",function (\JNC\Server $server,\JNC\TcpConnection $connection)
     $connection->send("你好，世界".date("YmdHis"));
 
 });
+
+//$server->on("workerReload",function (\Te\Server $server){
+//    fprintf(STDOUT,"worker <pid:%d> reload\r\n",posix_getpid());
+//});
+//$server->on("workerStop",function (\Te\Server $server){
+//    fprintf(STDOUT,"worker <pid:%d> stop\r\n",posix_getpid());
+//});
 
 
 $server->on("workerStart", function (\JNC\Server $server) {
@@ -127,7 +134,7 @@ $server->on("request",function (\JNC\Server $server,\JNC\Request $request,\JNC\R
 $server->on("receive",function (\JNC\Server $server,$msg,\JNC\TcpConnection $connection){
 
 
-    //fprintf(STDOUT,"<pid:%d>recv from client<%d>:%s\r\n",posix_getpid(),(int)$connection->socketfd(),$msg);
+    fprintf(STDOUT,"<pid:%d>recv from client<%d>:%s\r\n",posix_getpid(),(int)$connection->socketfd(),$msg);
     $server->echoLog("recv from client<%d>:%s\r\n",(int)$connection->socketfd(),$msg);
 
     //echo time()."\r\n";
@@ -163,6 +170,17 @@ $server->on("workerReload",function (\JNC\Server $server){
 
 $server->on("workerStop",function (\JNC\Server $server){
     fprintf(STDOUT,"worker <pid:%d> stop\r\n",posix_getpid());
+});
+
+$server->on("message",function (\JNC\Server $server,$frame,\JNC\TcpConnection $connection){
+
+
+    fprintf(STDOUT,"pid=%d 收到websocket客户端的数据了：%s\r\n",1,$frame);
+
+    //$data = file_get_contents("tex.log");
+
+    $connection->send("hello,world".date("YmdHis"));
+
 });
 
 $server->Start();

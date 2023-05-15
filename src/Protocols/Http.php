@@ -12,6 +12,7 @@ class Http implements Protocol
 
     public function Len($data)
     {
+        print_r($data);
         //前面肯定有这些
         if (strpos($data, "\r\n\r\n")) {
             //先➕上之前空白和换行4个字节

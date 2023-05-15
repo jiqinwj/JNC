@@ -34,10 +34,10 @@ class Client
     static public $_eventLoop;
 
     public $_protocols = [
-        "stream" => "Te\Protocols\Stream",
-        "text" => "Te\Protocols\Text",
-        "ws" => "Te\Protocols\Ws",
-        "mqtt" => "Te\Protocols\MqttClient",
+        "stream" => "JNC\Protocols\Stream",
+        "text" => "JNC\Protocols\Text",
+        "ws" => "JNC\Protocols\Ws",
+        "mqtt" => "JNC\Protocols\MqttClient",
     ];
     public $_mqttSetting = [];
     public $_usingProtocol;
@@ -160,6 +160,7 @@ class Client
 
         //fwrite 在发送数据的时候【会存在以下几种情况，1只发送一半,2 能完整的发送  3对端关了】
         $writeLen = fwrite($this->_mainSocket,$this->_sendBuffer,$this->_sendLen);
+
         if ($writeLen==$this->_sendLen){
             $this->_sendBuffer = '';
             $this->_sendLen=0;

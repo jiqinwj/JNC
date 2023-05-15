@@ -213,6 +213,27 @@ class Ws
         }
     }
 
+    //握手验证
+    public function verifyWsHandShake()
+    {
+
+        if (isset($_REQUEST['Connection'])&&$_REQUEST['Connection']=="Upgrade"
+            &&isset($_REQUEST['Upgrade'])&&$_REQUEST['Upgrade']=="websocket"
+        ){
+
+            $Acceptkey = $_REQUEST['Sec_WebSocket_Accept'];
+            if ($Acceptkey){
+
+                $key = base64_encode(sha1($this->_key."258EAFA5-E914-47DA-95CA-C5AB0DC85B11",true));
+                if ($key!=$Acceptkey){
+                    return false;
+                }
+                $this->_websocket_handshake_status=self::WEBSOCKET_RUNNING_STATUS;
+                return true;
+            }
+        }
+    }
+
     public function handshake()
     {
         /***
