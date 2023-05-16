@@ -6,6 +6,7 @@ use JNC\Protocols\Websocket;
 
 class TcpConnection
 {
+    const HEART_TIME = 10;//心跳事件
     public $_sockfd;//当前连接的fd socket
     public $_clientIp;//ip:port 当前连接的ip port
     public $_server;//当前服务器
@@ -46,6 +47,11 @@ class TcpConnection
         Server::$_eventLoop->add($this->_sockfd, Event\Event::EV_READ, [$this, "recv4socket"]);
     }
 
+    public function resetHeartTime()
+    {
+        $this->_heartTime = time();
+    }
+
     public function recv4socket()
     {
         if ($this->_recvLen<$this->_recvBufferSize){
@@ -80,7 +86,7 @@ class TcpConnection
                 $this->_recvLen-=$msgLen;
                 $this->_recvBufferFull--;
                 $this->_server->onMsg();
-//                $this->resetHeartTime();
+                $this->resetHeartTime();
                 $message = $this->_protocol->decode($oneMsg);
                 //$server->runEventCallBack("receive",[$message,$this]);
 
@@ -93,7 +99,7 @@ class TcpConnection
             $this->_recvLen=0;
             $this->_recvBufferFull=0;
             $this->_server->onMsg();
-//            $this->resetHeartTime();
+            $this->resetHeartTime();
         }
 
     }
@@ -292,6 +298,16 @@ class TcpConnection
         $request->_request = $_REQUEST;
         $request->_files = $_FILES;
         return $request;
+    }
+
+    public function checkHeartTime()
+    {
+        $now = time();
+        if ($now-$this->_heartTime>=self::HEART_TIME){
+            $this->_server->echoLog("心跳时间已经超出:%d\n",$now-$this->_heartTime);
+            return true;
+        }
+        return false;
     }
 
 

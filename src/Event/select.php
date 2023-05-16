@@ -175,4 +175,32 @@ class Select implements Event
         }
         $this->_signalEvents = [];
     }
+
+    public function timerCallBack()
+    {
+
+        //print_r($this->_timers);
+        //$param = [$func,$runTime,$flag,$timerId,$arg];
+        foreach ($this->_timers as $k=>$timer){
+
+            $func = $timer[0];
+            $runTime = $timer[1];//未来执行的时间点
+            $flag = $timer[2];
+            $timerId = $timer[3];
+            $fd = $timer[4];
+            $arg = $timer[5];
+
+            if ($runTime-microtime(true)<=0){
+
+                if ($flag==Event::EV_TIMER_ONCE){
+                    unset($this->_timers[$timerId]);
+                }else{
+                    $runTime = microtime(true)+$fd;//取得下一个时间点
+                    $this->_timers[$k][1] = $runTime;
+                }
+                call_user_func_array($func,[$timerId,$arg]);
+            }
+
+        }
+    }
 }

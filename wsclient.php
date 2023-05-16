@@ -15,7 +15,7 @@ $client->on("connect",function (\JNC\Client $client){
 $client->on("receive",function (\JNC\Client $client,$msg){
 
     fprintf(STDOUT,"recv from server:%s\n",$msg);
-    //$client->send("i am client 客户端");
+//    $client->send("i am client 客户端");
 });
 
 
@@ -31,7 +31,9 @@ $client->on("message",function (\JNC\Client $client,$msg){
 
     fprintf(STDOUT,"websocket client recv from server:%s\r\n",$msg);
 
-    $client->send("i am client 客户端");
+    //心跳启动的时候我不发送了 因为默认会有定时器发送 ping
+
+//    $client->send("i am client 客户端");
 });
 
 $client->on("error",function (\JNC\Client $client,$errno,$errstr){

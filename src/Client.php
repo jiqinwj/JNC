@@ -345,7 +345,8 @@ class Client
 
 
             //发送心跳ping
-            static::$_eventLoop->add(5,Event\Event::EV_TIMER,[$this,"sendPing"]);
+//            static::$_eventLoop->add(2,Event\Event::EV_TIMER_ONCE,[$this,"sendPing"]);
+            static::$_eventLoop->add(2,Event\Event::EV_TIMER,[$this,"sendPing"]);
 
 //            static::$_eventLoop->add($this->_mqttSetting['keepAlive'],Event\Event::EV_TIMER,[$this,"sendMqttPing"]);
 
@@ -361,7 +362,6 @@ class Client
     {
         if ($this->_protocol->_websocket_handshake_status==Ws::WEBSOCKET_RUNNING_STATUS)
         {
-
             $ping = $this->_protocol->ping();
             $this->send2fd($ping);
 //            fprintf(STDOUT,"heart ping:%d\r\n",$len);

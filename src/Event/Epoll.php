@@ -21,7 +21,6 @@ class Epoll implements Event
 
     public function add($fd, $flag, $func, $arg=[])
     {
-
         switch ($flag) {
             case self::EV_READ:
                 //fd 必须设置为非阻塞方式，因为epoll内部是使用非阻塞的文件描述符把它添加内核事件表
@@ -167,5 +166,21 @@ class Epoll implements Event
             }
         }
         $this->_timers = [];
+    }
+
+    public function timerCallBack($fd,$what,$arg)
+    {
+        // $param = [$func,$flag,$timerId,$arg];
+        $func = $arg[0];
+        $flag = $arg[1];
+        $timerId = $arg[2];
+        $userArg = $arg[3];
+
+        if ($flag==Event::EV_TIMER_ONCE){
+            $event = $this->_timers[$timerId][$flag];
+            $event->del();
+            unset($this->_timers[$timerId][$flag]);
+        }
+        call_user_func_array($func,[$timerId,$userArg]);
     }
 }

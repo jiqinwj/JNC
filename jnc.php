@@ -179,7 +179,7 @@ $server->on("message",function (\JNC\Server $server,$frame,\JNC\TcpConnection $c
 
     //$data = file_get_contents("tex.log");
 
-    $connection->send("hello,world".date("YmdHis"));
+//    $connection->send("hello,world".date("YmdHis"));
 
 });
 

@@ -166,6 +166,7 @@ class Ws
             }
 
             if ($this->_opcode==self::OPCODE_PONG){
+                print_r("收到客户端pong");
                 return true;
             }
 

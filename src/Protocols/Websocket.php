@@ -96,6 +96,8 @@ class Websocket implements Protocol
             if (strlen($data)<2){
                 return false;
             }
+
+            //数据是驻留在进程上的 这个地方要初始化下
             $this->_headerLen=2;
             $this->_dataLen = 0;
             //echo $data;//它的内存是连续的，是多个字节的
@@ -202,8 +204,9 @@ class Websocket implements Protocol
 
             if ($this->_opcode == self::OPCODE_PING){
                 $this->_opcode = "";
-//                $pong = $this->pong();
-//                return [2,$pong];
+                //websocket 数据返回必须按照网络框架返回设计
+                $pong = $this->pong();
+                return [2,$pong];
 
 
             }
@@ -308,11 +311,11 @@ class Websocket implements Protocol
 
     public function ping()
     {
-        return chr(0x01|self::OPCODE_PING).chr(0x00);
+        return chr(0x80|self::OPCODE_PING).chr(0x00);
     }
 
     public function pong()
     {
-        return chr(0x01|self::OPCODE_PONG).chr(0x00);
+        return chr(0x80|self::OPCODE_PONG).chr(0x00);
     }
 }

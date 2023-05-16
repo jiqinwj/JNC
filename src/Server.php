@@ -557,10 +557,10 @@ class Server
         //static::$_eventLoop->add($this->_mainSocket,Event::EV_READ,[$this,"Accept"]);
         $this->acceptClient();
 
-        //static::$_eventLoop->add(1,Event::EV_TIMER,[$this,"checkHeartTime"]);
+        static::$_eventLoop->add(1,Event::EV_TIMER,[$this,"checkHeartTime"]);
 
         //每个进程统计自己的连接数+fread接收次数+消息数
-        //static::$_eventLoop->add(1,Event::EV_TIMER,[$this,"statistics"]);
+        static::$_eventLoop->add(1,Event::EV_TIMER,[$this,"statistics"]);
         //static::$_eventLoop->add(2,Event::EV_TIMER,function ($timerId,$arg){
 //
         //     echo posix_getpid()."do 定时\r\n";
@@ -574,6 +574,22 @@ class Server
         //子进程退出之前做一些工作
         $this->runEventCallBack("workerStop", [$this]);
         exit(0);
+    }
+
+    public function statistics()
+    {
+
+        $nowTime = time();
+        $diffTime = $nowTime - $this->_startTime;
+        $this->_startTime = $nowTime;
+        if ($diffTime >= 1) {
+
+            $this->echoLog("pid<%d> time:<%s>--socket<%d>--<clientNum:%d>--<recvNum:%d>--<msgNum:%d>\r\n",
+                function_exists('posix_getpid()') ? posix_getpid() : 1, $diffTime, (int)$this->_mainSocket, static::$_clientNum, static::$_recvNum, static::$_msgNum);
+
+            static::$_recvNum = 0;
+            static::$_msgNum = 0;
+        }
     }
 
     //事件循环
@@ -709,5 +725,16 @@ class Server
         return false;
     }
 
+    public function checkHeartTime()
+    {
+
+        foreach (static::$_connections as $idx => $connection) {
+
+            if ($connection->checkHeartTime()) {
+                $connection->Close();
+            }
+
+        }
+    }
 
 }
